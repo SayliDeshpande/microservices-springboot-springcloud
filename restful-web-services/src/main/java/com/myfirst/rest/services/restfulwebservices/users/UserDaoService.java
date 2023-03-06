@@ -2,7 +2,9 @@ package com.myfirst.rest.services.restfulwebservices.users;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Component;
 
@@ -25,13 +27,19 @@ public class UserDaoService {
 	}
 	
 	public User getUser(int id) {
-		return list.get(id);
+		Predicate<? super User> predicate = user -> user.getId().equals(id); 
+		return list.stream().filter(predicate).findFirst().orElse(null);
 	}
 	
 	public User save(User user) {
 		user.setId(++userCount);
 		list.add(user);
 		return user;
+	}
+	
+	public void removeUser(int id) {
+		Predicate<? super User> predicate = user -> user.getId().equals(id); 
+		list.removeIf(predicate);
 	}
 
 
